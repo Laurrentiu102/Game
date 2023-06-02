@@ -8,8 +8,6 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager instance;
 
     public GameObject playerPrefab;
-    public GameObject mapGeneratorPrefab;
-    public HeightMapSettings heightMapSettings;
 
     private void Awake()
     {
@@ -36,16 +34,10 @@ public class NetworkManager : MonoBehaviour
     {
         Server.Stop();
     }
-
-    public GameObject InstantiateMapGenerator(Player player)
-    {
-        mapGeneratorPrefab.GetComponent<TerrainGenerator>().viewer = player.transform;
-        return Instantiate(mapGeneratorPrefab, Vector3.zero, Quaternion.identity);
-    }
+    
     public Player InstantiatePlayer()
     {
         Player player = Instantiate(playerPrefab, new Vector3(0f, 20f, 0f), Quaternion.identity).GetComponent<Player>();
-        mapGeneratorPrefab.GetComponent<TerrainGenerator>().viewer = player.transform;
         return player;
     }
 

@@ -129,39 +129,6 @@ public class ServerSend
         }
     }
 
-    public static void HeightMapSettings(int toClient)
-    {
-        HeightMapSettings heightMapSettings = NetworkManager.instance.heightMapSettings;
-        using (Packet packet = new Packet((int)ServerPackets.heightMapSettings))
-        {
-            packet.Write((heightMapSettings.noiseSettings.normalizeMode == Noise.NormalizeMode.Global)?1:0);
-            packet.Write(heightMapSettings.noiseSettings.scale);
-            packet.Write(heightMapSettings.noiseSettings.octaves);
-            packet.Write(heightMapSettings.noiseSettings.persistance);
-            packet.Write(heightMapSettings.noiseSettings.lacunarity);
-            packet.Write(heightMapSettings.noiseSettings.seed);
-            packet.Write(heightMapSettings.noiseSettings.offset.x);
-            packet.Write(heightMapSettings.noiseSettings.offset.y);
-            packet.Write(heightMapSettings.useFalloff);
-            packet.Write(heightMapSettings.falloffMapSize);
-            packet.Write(heightMapSettings.heightMultiplier);
-            packet.Write(heightMapSettings.numberOfTreePrefabs);
-            packet.Write(heightMapSettings.numberOfTreesPerChunk);
-            
-            Keyframe[] keyframes = heightMapSettings.heightCurve.keys;
-            packet.Write(keyframes.Length);
-            foreach (Keyframe keyframe in keyframes)
-            {
-                packet.Write(keyframe.time);
-                packet.Write(keyframe.value);
-                packet.Write(keyframe.inTangent);
-                packet.Write(keyframe.outTangent);
-            }
-
-            SendTCPData(toClient, packet);
-        }
-    }
-
     public static void ServerDayNightTime()
     {
         using (Packet packet = new Packet((int)ServerPackets.serverDayNightTime))

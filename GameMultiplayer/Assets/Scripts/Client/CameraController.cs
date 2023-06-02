@@ -14,7 +14,6 @@ public class CameraController : MonoBehaviour
     private float lastMouseY;  // Last mouse Y input
 
     private RaycastHit hit;
-    private bool isHitting = false;
 
 
     private void Start()

@@ -52,7 +52,6 @@ public class Client
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
             ServerSend.Welcome(id, "Welcome to the server!");
-            ServerSend.HeightMapSettings(id);
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -216,7 +215,6 @@ public class Client
     {
         player = NetworkManager.instance.InstantiatePlayer();
         player.Initialize(id, _playerName);
-        mapGenerator = NetworkManager.instance.InstantiateMapGenerator(player);
 
         // Send all players to the new player
         foreach (Client _client in Server.clients.Values)
@@ -248,8 +246,6 @@ public class Client
         ThreadManager.ExecuteOnMainThread(() =>
         {
             UnityEngine.Object.Destroy(player.gameObject);
-            UnityEngine.Object.Destroy(mapGenerator.gameObject);
-            TreeGeneratorMono.instance.StopAllCoroutines();
             player = null;
         });
 

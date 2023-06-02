@@ -11,7 +11,6 @@ public class TreeGenerator : EditorWindow
     public GameObject tree;
     public Material trunkMaterial;
     public Material leavesMaterial;
-    public HeightMapSettings heightMapSettings;
     public int _recursionLevel = 3;
     public float _roughness = 1f;
     public int _basePolygon = 20;
@@ -50,48 +49,6 @@ public class TreeGenerator : EditorWindow
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Generate Tree", GUILayout.Height(64)))
             gen();
-        if (GUILayout.Button("Save mesh to Assets", GUILayout.Height(64)))
-            saveMesh();
-        if (GUILayout.Button("Gen multiple Meshes", GUILayout.Height(64)))
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                gen(i);
-                saveMesh(i);
-                DestroyImmediate(tree);
-            }
-        }
-    }
-
-    private void saveMesh()
-    {
-        Mesh mesh = tree.GetComponent<MeshFilter>().sharedMesh;
-        SerializationData meshData = mesh.Serialize();
-        Debug.Log(Application.persistentDataPath);
-        string filePath = Path.Combine(Application.persistentDataPath, "ceva" + ".mesh");
-
-        // Write the mesh data to the file
-        BinaryFormatter formatter = new BinaryFormatter();
-
-        // Create a FileStream to write to the file
-        FileStream fileStream = File.Create(filePath);
-
-        // Serialize the data and write it to the FileStream
-        formatter.Serialize(fileStream, meshData);
-
-        // Close the FileStream
-        fileStream.Close();
-        AssetDatabase.DeleteAsset("Assets/Prefabs/TreePrefabs/tree.asset");
-        AssetDatabase.CreateAsset(tree.GetComponent<MeshFilter>().sharedMesh, "Assets/tree.asset");
-        AssetDatabase.SaveAssets();
-    }
-
-    private void saveMesh(int i)
-    {
-        AssetDatabase.DeleteAsset("Assets/Prefabs/TreePrefabs/tree_" + i + ".asset");
-        AssetDatabase.CreateAsset(tree.GetComponent<MeshFilter>().sharedMesh,
-            "Assets/Prefabs/TreePrefabs/tree_" + i + ".asset");
-        AssetDatabase.SaveAssets();
     }
 
     static T[] SubArray<T>(T[] data, int index, int length)
@@ -115,85 +72,8 @@ public class TreeGenerator : EditorWindow
         return Random.Range(val - val * _randomRatio, val + val * _randomRatio);
     }
 
-    private Mesh LoadMesh(string path)
-    {
-        return AssetDatabase.LoadAssetAtPath<Mesh>(path);
-    }
-
-    // Start is called before the first frame update
-    void gen(int i)
-    {
-        Random.InitState(heightMapSettings.noiseSettings.seed+i);
-        _recursionLevel = Random.Range(1,4);
-        _roughness = Random.Range(0.5f, 3.5f);
-        _basePolygon = Random.Range(20, 31);
-        _floorNumber = Random.Range(40, 51);
-        _trunkThickness = Random.Range(0.45f, 0.75f);
-        _floorHeight = Random.Range(0.1f, 0.15f);
-        _firstBranchHeight = Random.Range(0.1f, 0.3f);
-        _distorsionCone = Random.Range(20f, 60f);
-        _twistiness = Random.Range(8f, 20f);
-        _reductionRate = Random.Range(0.05f, 0.2f);
-        _branchDensity = Random.Range(0.1f, 1f);
-        _leavesSize = Random.Range(10f, 20f);
-        smoothingPower = 2;
-        
-        if(_twistiness>=15 && _twistiness<=20)
-            _leavesSize= Random.Range(5f, 10f);
-        if(_trunkThickness>=0.65)
-            _leavesSize= Random.Range(5f, 10f);
-        if (!_leavesMesh)
-            _leavesMesh = LoadMesh("Assets/Meshes/Generated/Detailed.asset");
-        if (!leavesMaterial)
-            leavesMaterial = trunkMaterial;
-        if (tree)
-            DestroyImmediate(tree);
-        tree = new GameObject("tree");
-
-
-        int basePolygon = Mathf.Max(3, getCloseValue(_basePolygon));
-        Vector3[] startVertices = new Vector3[basePolygon];
-        Vector2[] startUv = new Vector2[basePolygon];
-
-        float angularStep = 2f * Mathf.PI / (float)(basePolygon);
-        for (int j = 0; j < basePolygon; ++j)
-        {
-            Vector3 randomness = new Vector3
-            (
-                Random.Range(-_roughness, _roughness),
-                Random.Range(-_roughness, _roughness),
-                Random.Range(-_roughness, _roughness)
-            ) / 10f;
-            Vector3 pos = new Vector3(Mathf.Cos(j * angularStep), 0f, Mathf.Sin(j * angularStep)) + randomness;
-            startVertices[j] = _trunkThickness * (pos);
-            startUv[j] = new Vector2(j * angularStep, startVertices[j].y);
-        }
-
-        Mesh mesh = GenBranch(tree, basePolygon, startVertices, startUv, getCloseValue(_trunkThickness),
-            getCloseValue(_floorHeight), getCloseValue(_floorNumber), new Vector3(), Vector3.up, 0f,
-            getCloseValue(_distorsionCone), getCloseValue(_roughness), getCloseValue(_branchDensity),
-            getCloseValue(_recursionLevel));
-
-        CombineInstance[] combine = new CombineInstance[2];
-        combine[0].mesh =
-            MeshSmoothener.SmoothMesh(mesh.GetSubmesh(0), smoothingPower, MeshSmoothener.Filter.Laplacian);
-        combine[0].transform = tree.transform.localToWorldMatrix;
-        combine[1].mesh = mesh.GetSubmesh(1);
-        combine[1].transform = tree.transform.localToWorldMatrix;
-        mesh.CombineMeshes(combine, false, false);
-        //mesh = MeshSmoothener.SmoothMesh(mesh, smoothingPower, MeshSmoothener.Filter.Laplacian);
-
-        mesh.RecalculateNormals();
-
-        tree.AddComponent<MeshFilter>().mesh = mesh;
-        tree.AddComponent<MeshRenderer>().materials = new Material[2] { trunkMaterial, leavesMaterial };
-    }
-    
     void gen()
     {
-        Random.InitState(heightMapSettings.noiseSettings.seed);
-        if (!_leavesMesh)
-            _leavesMesh = LoadMesh("Assets/Meshes/Generated/Detailed.asset");
         if (!leavesMaterial)
             leavesMaterial = trunkMaterial;
         if (tree)

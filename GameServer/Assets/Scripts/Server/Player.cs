@@ -10,10 +10,6 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
-    
-    public float landGravity = -9.81f;
-    public float landMoveSpeed = 5f;
-    public float landJumpSpeed = 5f;
 
     private bool[] inputs;
     private float yVelocity = 0;
@@ -23,10 +19,6 @@ public class Player : MonoBehaviour
         gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
         moveSpeed *= Time.fixedDeltaTime;
         jumpSpeed *= Time.fixedDeltaTime;
-
-        landGravity = gravity;
-        landMoveSpeed = moveSpeed;
-        landJumpSpeed = jumpSpeed;
     }
 
     public void Initialize(int _id, string _username)
@@ -65,18 +57,6 @@ public class Player : MonoBehaviour
     /// <param name="_inputDirection"></param>
     private void Move(Vector2 _inputDirection)
     {
-        if (controller.gameObject.transform.position.y > Constants.MAX_HEIGHT * Constants.WATER_HEIGHT)
-        { 
-            gravity = landGravity;
-            moveSpeed = landMoveSpeed; 
-            jumpSpeed = landJumpSpeed;
-        }
-        else
-        {
-            gravity = -0.01f;
-            moveSpeed = landMoveSpeed*0.5f; 
-            jumpSpeed = 0.01f;
-        }
         Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
         _moveDirection *= moveSpeed;
 
@@ -88,21 +68,7 @@ public class Player : MonoBehaviour
                 yVelocity = jumpSpeed;
             }
         }
-        else if(controller.gameObject.transform.position.y < Constants.MAX_HEIGHT * Constants.WATER_HEIGHT)
-        {
-            if (inputs[4])
-            {
-                yVelocity = jumpSpeed;
-            }
-            else
-            {
-                yVelocity = gravity;
-            }
-        }
-        else
-        {
-            yVelocity += gravity;
-        }
+        yVelocity += gravity;
 
         _moveDirection.y = yVelocity;
         controller.Move(_moveDirection);

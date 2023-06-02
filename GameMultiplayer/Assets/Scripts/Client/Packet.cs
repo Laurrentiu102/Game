@@ -11,7 +11,6 @@ public enum ServerPackets
     spawnPlayer,
     playerPosition,
     playerRotation,
-    heightMapSettings,
     serverDayNightTime,
     playerDisconnected
 }

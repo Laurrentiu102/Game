@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
-    public GameObject mapGeneratorPrefab;
-    public HeightMapSettings heightMapSettings;
 
     private void Awake()
     {
@@ -37,8 +35,6 @@ public class GameManager : MonoBehaviour
         if (_id == Client.instance.myId)
         {
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
-            mapGeneratorPrefab.GetComponent<TerrainGenerator>().viewer = _player.transform;
-            Instantiate(mapGeneratorPrefab, Vector3.zero, Quaternion.identity);
         }
         else
         {
