@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NetworkManager : MonoBehaviour
+{
+    public static NetworkManager instance;
+
+    public GameObject playerPrefab;
+    public GameObject mapGeneratorPrefab;
+    public HeightMapSettings heightMapSettings;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
+
+    private void Start()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
+        Server.Start(Constants.MAX_PLAYERS, 26951);
+    }
+
+    private void OnApplicationQuit()
+    {
+        Server.Stop();
+    }
+
+    public GameObject InstantiateMapGenerator(Player player)
+    {
+        mapGeneratorPrefab.GetComponent<TerrainGenerator>().viewer = player.transform;
+        return Instantiate(mapGeneratorPrefab, Vector3.zero, Quaternion.identity);
+    }
+    public Player InstantiatePlayer()
+    {
+        Player player = Instantiate(playerPrefab, new Vector3(0f, 20f, 0f), Quaternion.identity).GetComponent<Player>();
+        mapGeneratorPrefab.GetComponent<TerrainGenerator>().viewer = player.transform;
+        return player;
+    }
+
+    public void FixedUpdate()
+    {
+        ServerSend.ServerDayNightTime();
+    }
+}

@@ -1,0 +1,4 @@
+/GameMultiplayer/*
+/GameServer/*
+!/GameMultiplayer/Assets
+!/GameServer/Assets
