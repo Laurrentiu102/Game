@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class CameraController : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
     private float lastMouseY;  // Last mouse Y input
 
     private RaycastHit hit;
+    private Vector2 mousePos;
 
 
     private void Start()
@@ -62,15 +63,26 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            mousePos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            SetCursorPos((int)mousePos.x, Screen.height-(int)mousePos.y);
+        }
+        
         if (Input.GetMouseButton(1))
         {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
             mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
             mouseY -= Input.GetAxis("Mouse Y") * rotationSpeed;
             mouseY = Mathf.Clamp(mouseY, -60f, 60f);
             lastMouseX = mouseX;
             lastMouseY = mouseY;
-
-            Cursor.visible = false;
+            
             Quaternion rotation = Quaternion.Euler(mouseY, mouseX, 0f);
             
             Vector3 desiredPosition = target.position - rotation * Vector3.forward * distanceFromTarget + Vector3.up * height;
@@ -89,10 +101,14 @@ public class CameraController : MonoBehaviour
         }
         else
         {
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         
 
         Debug.DrawLine(target.transform.position-transform.forward,target.position,Color.red);
     }
+    
+    [DllImport("user32.dll", EntryPoint = "SetCursorPos")]
+    private static extern bool SetCursorPos(int x, int y);
 }

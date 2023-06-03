@@ -215,6 +215,7 @@ public class Client
     {
         player = NetworkManager.instance.InstantiatePlayer();
         player.Initialize(id, _playerName);
+        player.transform.position = new Vector3(0, 210, 0);
 
         // Send all players to the new player
         foreach (Client _client in Server.clients.Values)
