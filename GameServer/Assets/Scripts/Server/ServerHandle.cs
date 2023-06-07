@@ -28,4 +28,10 @@ public class ServerHandle
 
         Server.clients[_fromClient].player.SetInput(_inputs, _rotation);
     }
+    
+    public static void PlayerTargetId(int _fromClient, Packet _packet)
+    {
+        int targetId = _packet.ReadInt();
+        Server.clients[_fromClient].player.targetId= targetId;
+    }
 }

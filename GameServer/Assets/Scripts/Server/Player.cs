@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public int id;
     public string username;
     public CharacterController controller;
+    public int targetId;
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;

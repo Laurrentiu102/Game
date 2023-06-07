@@ -49,5 +49,15 @@ public class ClientSend : MonoBehaviour
             SendUDPData(_packet);
         }
     }
+
+    public static void PlayerTargetId(int id)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerTargetId))
+        {
+            _packet.Write(id);
+            
+            SendUDPData(_packet);
+        }
+    }
     #endregion
 }

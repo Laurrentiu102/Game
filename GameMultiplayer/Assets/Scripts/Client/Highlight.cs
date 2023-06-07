@@ -34,6 +34,11 @@ public class Highlight : MonoBehaviour
         return gameObject;
     }
 
+    void Update()
+    {
+        ClientSend.PlayerTargetId(playerManager.targetId);
+    }
+
     void LateUpdate()
     {
         RaycastHit hit;
