@@ -29,7 +29,7 @@ public class Highlight : MonoBehaviour
     
     private GameObject GetTransformParent(GameObject gameObject)
     {
-        if (gameObject.transform.parent.gameObject.CompareTag("Targetable"))
+        if (gameObject.transform.parent!=null && gameObject.transform.parent.gameObject.CompareTag("Targetable"))
             return gameObject.transform.parent.gameObject;
         return gameObject;
     }
@@ -43,7 +43,7 @@ public class Highlight : MonoBehaviour
     {
         RaycastHit hit;
         Debug.DrawRay(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction*1000f,Color.red);
-        if(Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity))
+        if(!Input.GetMouseButton(1) && Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity))
         {
             GameObject target = GetTransformParent(hit.collider.gameObject);
             if (target.CompareTag("Targetable"))

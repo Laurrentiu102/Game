@@ -7,7 +7,6 @@ public class NameTagScript : MonoBehaviour
     private void Start()
     {
         camera = GameObject.Find("LocalPlayerCamera").transform;
-        Debug.Log(camera.gameObject.name);
     }
 
     private void LateUpdate()

@@ -55,4 +55,39 @@ public class ClientHandle : MonoBehaviour
         Destroy(GameManager.players[_id].gameObject);
         GameManager.players.Remove(_id);
     }
+
+    public static void SpawnProjectile(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        int casterId = _packet.ReadInt();
+        int targetId = _packet.ReadInt();
+        int damage = _packet.ReadInt();
+        Vector3 positon = _packet.ReadVector3();
+        
+        GameManager.instance.SpawnProjectile(id,casterId,targetId,damage,positon);
+    }
+    
+    public static void ProjectilePosition(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 positon = _packet.ReadVector3();
+        
+        GameManager.projectiles[id].transform.position = positon;
+    }
+
+    public static void ProjectileHit(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        
+        GameManager.projectiles[id].Explode();
+    }
+
+    public static void ProjectileDespawn(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+
+        GameObject aux = GameManager.projectiles[id].gameObject;
+        GameManager.projectiles.Remove(id);
+        Destroy(aux);
+    }
 }

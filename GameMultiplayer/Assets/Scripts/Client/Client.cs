@@ -303,6 +303,10 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.playerRotation, ClientHandle.PlayerRotation },
             { (int)ServerPackets.serverDayNightTime, ClientHandle.ServerDayNightTime },
             { (int)ServerPackets.playerDisconnected, ClientHandle.PlayerDisconnected },
+            { (int)ServerPackets.spawnProjectile, ClientHandle.SpawnProjectile },
+            { (int)ServerPackets.projectilePosition, ClientHandle.ProjectilePosition },
+            { (int)ServerPackets.projectileHit, ClientHandle.ProjectileHit },
+            { (int)ServerPackets.projectileDespawn, ClientHandle.ProjectileDespawn }
         };
         Debug.Log("Initialized packets.");
     }

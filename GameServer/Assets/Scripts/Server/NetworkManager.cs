@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager instance;
 
     public GameObject playerPrefab;
+    public List<GameObject> projectilesPrefabs = new List<GameObject>();
 
     private void Awake()
     {
@@ -44,5 +45,10 @@ public class NetworkManager : MonoBehaviour
     public void FixedUpdate()
     {
         ServerSend.ServerDayNightTime();
+    }
+    
+    public Projectile InstantiateProjectile(Transform shootOrigin)
+    {
+        return Instantiate(projectilesPrefabs[0], shootOrigin.position+shootOrigin.forward*0.7f, Quaternion.identity).GetComponent<Projectile>();
     }
 }

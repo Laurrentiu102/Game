@@ -148,5 +148,50 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
+
+    public static void SpawnProjectile(Projectile _projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnProjectile))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.casterId);
+            _packet.Write(_projectile.targetId);
+            _packet.Write(_projectile.damage);
+            _packet.Write(_projectile.transform.position);
+            
+            SendTCPDataToAll(_packet);
+        }
+    }
+    
+    public static void ProjectilePosition(Projectile _projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.projectilePosition))
+        {
+            _packet.Write(_projectile.id);
+            _packet.Write(_projectile.transform.position);
+            
+            SendUDPDataToAll(_packet);
+        }
+    }
+    
+    public static void ProjectileHit(Projectile _projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.projectileHit))
+        {
+            _packet.Write(_projectile.id);
+            
+            SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void ProjectileDespawn(int id)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.projectileDespawn))
+        {
+            _packet.Write(id);
+            
+            SendTCPDataToAll(_packet);
+        }
+    }
     #endregion
 }

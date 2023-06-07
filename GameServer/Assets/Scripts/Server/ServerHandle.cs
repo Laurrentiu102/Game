@@ -34,4 +34,10 @@ public class ServerHandle
         int targetId = _packet.ReadInt();
         Server.clients[_fromClient].player.targetId= targetId;
     }
+
+    public static void PlayerCastProjectile(int _fromClient, Packet _packet)
+    {
+        Vector3 viewDirection = _packet.ReadVector3();
+        Server.clients[_fromClient].player.CastProjectile();
+    }
 }
