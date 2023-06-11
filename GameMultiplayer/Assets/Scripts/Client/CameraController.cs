@@ -41,7 +41,7 @@ public class CameraController : MonoBehaviour
         else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
             distanceFromTarget += 0.5f;
 
-        distanceFromTarget = Mathf.Clamp(distanceFromTarget, 1, 40);
+        distanceFromTarget = Mathf.Clamp(distanceFromTarget, 3, 40);
         
         Quaternion rotation = Quaternion.Euler(lastMouseY, lastMouseX, 0f);
         Vector3 desiredPosition = target.position - rotation * Vector3.forward * distanceFromTarget + Vector3.up * height;

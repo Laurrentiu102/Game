@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public List<GameObject> projectilesPrefabs;
+    public List<Sprite> spellIcons = new List<Sprite>();
 
     private void Awake()
     {
@@ -48,10 +50,10 @@ public class GameManager : MonoBehaviour
         players.Add(_id, _player.GetComponent<PlayerManager>());
     }
 
-    public void SpawnProjectile(int _id,int _casterId,int _targetId,int _damage,Vector3 _position)
+    public void SpawnProjectile(int _id,int _casterId,int _targetId,int _damage,Vector3 _position,int typeOfProjectile)
     {
-        GameObject _projectile = Instantiate(projectilesPrefabs[0], _position, Quaternion.identity);
-        _projectile.GetComponent<ProjectileManager>().Initialize(_id,_casterId,_targetId,_damage);
+        GameObject _projectile = Instantiate(projectilesPrefabs[typeOfProjectile], _position, Quaternion.identity);
+        _projectile.GetComponent<ProjectileManager>().Initialize(_id,_casterId,_targetId,_damage,typeOfProjectile);
         projectiles.Add(_id,_projectile.GetComponent<ProjectileManager>());
     }
 }

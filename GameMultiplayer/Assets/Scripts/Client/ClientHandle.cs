@@ -63,8 +63,9 @@ public class ClientHandle : MonoBehaviour
         int targetId = _packet.ReadInt();
         int damage = _packet.ReadInt();
         Vector3 positon = _packet.ReadVector3();
+        int typeOfProjectile = _packet.ReadInt();
         
-        GameManager.instance.SpawnProjectile(id,casterId,targetId,damage,positon);
+        GameManager.instance.SpawnProjectile(id,casterId,targetId,damage,positon,typeOfProjectile);
     }
     
     public static void ProjectilePosition(Packet _packet)
@@ -72,7 +73,8 @@ public class ClientHandle : MonoBehaviour
         int id = _packet.ReadInt();
         Vector3 positon = _packet.ReadVector3();
         
-        GameManager.projectiles[id].transform.position = positon;
+        if(GameManager.projectiles.TryGetValue(id, out var projectile))
+            projectile.transform.position = positon;
     }
 
     public static void ProjectileHit(Packet _packet)

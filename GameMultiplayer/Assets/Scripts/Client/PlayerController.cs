@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public TextMeshProUGUI spellCastTime;
+    public TextMeshProUGUI spellName;
+    public Image spellIcon;
     private void FixedUpdate()
     {
         SendInputToServer();
@@ -13,7 +15,20 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            ClientSend.PlayerCastProjectile(transform.forward);
+        {
+            spellName.text = Spell.spells[0].spellName;
+            spellCastTime.text = Spell.spells[0].castTime.ToString();
+            spellIcon.sprite = Spell.spells[0].spellImage;
+            ClientSend.PlayerCastProjectile(0,transform.forward);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            spellName.text = Spell.spells[1].spellName;
+            spellCastTime.text = Spell.spells[1].castTime.ToString();
+            spellIcon.sprite = Spell.spells[1].spellImage;
+            ClientSend.PlayerCastProjectile(1,transform.forward);
+        }
         
     }
 

@@ -62,6 +62,8 @@ public class Server
         try
         {
             IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            if(udpListener==null || udpListener.Client==null)
+                return;
             byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
@@ -69,7 +71,7 @@ public class Server
             {
                 return;
             }
-
+            
             using (Packet _packet = new Packet(_data))
             {
                 int _clientId = _packet.ReadInt();
@@ -132,7 +134,10 @@ public class Server
             { (int)ClientPackets.playerTargetId, ServerHandle.PlayerTargetId },
             { (int)ClientPackets.playerCastProjectile, ServerHandle.PlayerCastProjectile }
         };
-        Debug.Log("Initialized packets.");
+        
+        Spell.InitializeSpells();
+        
+        Debug.Log("Initialized packets and spells.");
     }
 
     public static void Stop()

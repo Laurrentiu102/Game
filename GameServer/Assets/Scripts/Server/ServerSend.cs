@@ -158,6 +158,7 @@ public class ServerSend
             _packet.Write(_projectile.targetId);
             _packet.Write(_projectile.damage);
             _packet.Write(_projectile.transform.position);
+            _packet.Write(_projectile.typeOfProjectile);
             
             SendTCPDataToAll(_packet);
         }

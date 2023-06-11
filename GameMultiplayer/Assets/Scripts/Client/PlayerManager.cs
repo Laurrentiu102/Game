@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -13,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     public TextMeshProUGUI tagName;
     private void Start()
     {
+        Spell.InitializeSpells();
         tagName.text = username;
     }
 }

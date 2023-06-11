@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class ClientSend : MonoBehaviour
@@ -60,10 +59,11 @@ public class ClientSend : MonoBehaviour
         }
     }
     
-    public static void PlayerCastProjectile(Vector3 facing)
+    public static void PlayerCastProjectile(int projectileType,Vector3 facing)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerCastProjectile))
         {
+            _packet.Write(projectileType);
             _packet.Write(facing);
             
             SendTCPData(_packet);

@@ -87,9 +87,9 @@ public class Player : MonoBehaviour
         transform.rotation = _rotation;
     }
 
-    public void CastProjectile()
+    public void CastProjectile(int typeOfProjectile,Vector3 viewDirection)
     {
         if(targetId!=0 && targetId!=-1)
-            NetworkManager.instance.InstantiateProjectile(transform).Initialize(id,targetId,1);
+            NetworkManager.instance.InstantiateProjectile(transform,typeOfProjectile).Initialize(id,targetId,1,typeOfProjectile);
     }
 }

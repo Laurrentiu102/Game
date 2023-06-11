@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour
     public int casterId;
     public int targetId;
     public int damage;
+    public int typeOfProjectile;
 
     private void Start()
     {
@@ -24,7 +25,7 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Server.clients.ContainsKey(targetId) && Server.clients[targetId].player==null)
+        if ((Server.clients.ContainsKey(casterId) && Server.clients[casterId].player==null) || (Server.clients.ContainsKey(targetId) && Server.clients[targetId].player==null))
         {
             ServerSend.ProjectileDespawn(id);
             projectiles.Remove(id);
@@ -57,8 +58,9 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Initialize(int casterId,int targetId,int damage)
+    public void Initialize(int casterId,int targetId,int damage, int typeOfProjectile)
     {
+        this.typeOfProjectile = typeOfProjectile;
         this.casterId = casterId;
         this.targetId = targetId;
         this.damage = damage;
