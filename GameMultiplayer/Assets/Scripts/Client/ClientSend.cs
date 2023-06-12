@@ -59,11 +59,11 @@ public class ClientSend : MonoBehaviour
         }
     }
     
-    public static void PlayerCastProjectile(int projectileType,Vector3 facing)
+    public static void PlayerCastProjectile(int spellId,Vector3 facing)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerCastProjectile))
         {
-            _packet.Write(projectileType);
+            _packet.Write(spellId);
             _packet.Write(facing);
             
             SendTCPData(_packet);

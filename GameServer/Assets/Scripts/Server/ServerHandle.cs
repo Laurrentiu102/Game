@@ -37,8 +37,8 @@ public class ServerHandle
 
     public static void PlayerCastProjectile(int _fromClient, Packet _packet)
     {
-        int typeOfProjectile= _packet.ReadInt();
+        int spellId= _packet.ReadInt();
         Vector3 viewDirection = _packet.ReadVector3();
-        Server.clients[_fromClient].player.CastProjectile(typeOfProjectile,viewDirection);
+        Server.clients[_fromClient].player.CastProjectile(spellId,viewDirection);
     }
 }

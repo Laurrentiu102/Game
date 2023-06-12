@@ -94,7 +94,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6590821616795268707}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -111,10 +111,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d150a1a1b947c598cdbd10bb7cb725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellBook: {fileID: 9137143234922832872, guid: 5137348bc79dfec459ceea45fb19919c, type: 3}
   id: 0
   casterId: 0
   targetId: 0
-  damage: 0
+  spell:
+    id: 0
+    name: 
+    damage: 0
+    speed: 0
+    castTime: 0
 --- !u!54 &3759019696691459948
 Rigidbody:
   m_ObjectHideFlags: 0

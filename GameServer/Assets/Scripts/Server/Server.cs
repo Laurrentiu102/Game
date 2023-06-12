@@ -134,9 +134,7 @@ public class Server
             { (int)ClientPackets.playerTargetId, ServerHandle.PlayerTargetId },
             { (int)ClientPackets.playerCastProjectile, ServerHandle.PlayerCastProjectile }
         };
-        
-        Spell.InitializeSpells();
-        
+
         Debug.Log("Initialized packets and spells.");
     }
 

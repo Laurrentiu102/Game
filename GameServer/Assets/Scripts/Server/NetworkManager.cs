@@ -47,8 +47,8 @@ public class NetworkManager : MonoBehaviour
         ServerSend.ServerDayNightTime();
     }
     
-    public Projectile InstantiateProjectile(Transform shootOrigin,int typeOfProjectile)
+    public Projectile InstantiateProjectile(Transform shootOrigin,int spellId)
     {
-        return Instantiate(projectilesPrefabs[typeOfProjectile], shootOrigin.position+shootOrigin.forward*0.7f, Quaternion.identity).GetComponent<Projectile>();
+        return Instantiate(projectilesPrefabs[spellId], shootOrigin.position+shootOrigin.forward*0.7f, Quaternion.identity).GetComponent<Projectile>();
     }
 }

@@ -9,7 +9,6 @@ public class PlayerManager : MonoBehaviour
     public TextMeshProUGUI tagName;
     private void Start()
     {
-        Spell.InitializeSpells();
         tagName.text = username;
     }
 }

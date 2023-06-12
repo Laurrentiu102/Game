@@ -1,32 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+[Serializable]
 public class Spell
 {
-    public int id;
-    public string spellName;
-    public float castTime;
-    public Sprite spellImage;
-    public static Dictionary<int,Spell> spells = new Dictionary<int, Spell>();
+    [SerializeField] 
+    private int id;
     
-    public Spell(int _id, string _spellName, float _castTime)
+    [SerializeField]
+    private string name;
+    
+    [SerializeField]
+    private int damage;
+    
+    [SerializeField]
+    private Sprite icon;
+    
+    [SerializeField]
+    private float speed;
+
+    [SerializeField] 
+    private float castTime;
+    
+    [SerializeField]
+    private Color barColor;
+
+    public string Name
     {
-        id = _id;
-        spellName = _spellName;
-        castTime = _castTime;
-        spellImage = GameManager.instance.spellIcons[id];
+        get => name;
+        set => name = value;
     }
 
-    public static void InitializeSpells()
+    public int Damage
     {
-        int spellId = 0;
-        Spell fireball = new Spell(spellId++,"Fireball",1f);
-        Spell shadowball = new Spell(spellId++,"Shadowball",1f);
-        
-        spells.Add(fireball.id,fireball);
-        spells.Add(shadowball.id,shadowball);
+        get => damage;
+        set => damage = value;
     }
-    
+
+    public Sprite Icon
+    {
+        get => icon;
+        set => icon = value;
+    }
+
+    public float Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public float CastTime
+    {
+        get => castTime;
+        set => castTime = value;
+    }
+
+    public Color BarColor
+    {
+        get => barColor;
+        set => barColor = value;
+    }
 }

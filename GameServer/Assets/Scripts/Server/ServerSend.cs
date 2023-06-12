@@ -156,9 +156,8 @@ public class ServerSend
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.casterId);
             _packet.Write(_projectile.targetId);
-            _packet.Write(_projectile.damage);
             _packet.Write(_projectile.transform.position);
-            _packet.Write(_projectile.typeOfProjectile);
+            _packet.Write(_projectile.spell.Id);
             
             SendTCPDataToAll(_packet);
         }

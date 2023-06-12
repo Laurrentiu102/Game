@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +9,13 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI spellCastTime;
     public TextMeshProUGUI spellName;
     public Image spellIcon;
+    public SpellBook spellBook;
+
+    private void Awake()
+    {
+        spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
+    }
+
     private void FixedUpdate()
     {
         SendInputToServer();
@@ -14,22 +23,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            spellName.text = Spell.spells[0].spellName;
-            spellCastTime.text = Spell.spells[0].castTime.ToString();
-            spellIcon.sprite = Spell.spells[0].spellImage;
-            ClientSend.PlayerCastProjectile(0,transform.forward);
-        }
+        int id = -1;
+        for (int i = 0; i < 2; i++)
+            if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), (i + 49).ToString())))
+                id = i;
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (id != -1)
         {
-            spellName.text = Spell.spells[1].spellName;
-            spellCastTime.text = Spell.spells[1].castTime.ToString();
-            spellIcon.sprite = Spell.spells[1].spellImage;
-            ClientSend.PlayerCastProjectile(1,transform.forward);
+            ClientSend.PlayerCastProjectile(id,transform.forward);
+            Spell spell = spellBook.GetSpell(id);
+            spellName.text = spell.Name;
+            spellIcon.sprite = spell.Icon;
+            spellCastTime.text = spell.CastTime.ToString(CultureInfo.InvariantCulture);
         }
-        
     }
 
     /// <summary>Sends player input to the server.</summary>

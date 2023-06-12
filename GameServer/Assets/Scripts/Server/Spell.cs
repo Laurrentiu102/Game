@@ -1,27 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public class Spell
 {
-    public int id;
-    public string spellName;
-    public float castTime;
-    public static Dictionary<int,Spell> spells = new Dictionary<int, Spell>();
+    [SerializeField]
+    private int id;
     
-    public Spell(int _id, string _spellName, float _castTime)
-    {
-        id = _id;
-        spellName = _spellName;
-        castTime = _castTime;
-    }
+    [SerializeField]
+    private string name;
+    
+    [SerializeField]
+    private int damage;
 
-    public static void InitializeSpells()
-    {
-        int spellId = 0;
-        Spell fireball = new Spell(spellId++,"Fireball",1f);
-        Spell shadowball = new Spell(spellId++,"Shadowball",1f);
-        
-        spells.Add(fireball.id,fireball);
-        spells.Add(shadowball.id,shadowball);
-    }
-    
+    [SerializeField]
+    private float speed;
+
+    [SerializeField] 
+    private float castTime;
+
+    public int Id => id;
+
+    public string Name => name;
+
+    public int Damage => damage;
+
+    public float Speed => speed;
+
+    public float CastTime => castTime;
 }

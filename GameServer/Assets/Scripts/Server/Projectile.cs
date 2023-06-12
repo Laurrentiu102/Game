@@ -6,14 +6,14 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
+    public SpellBook spellBook;
     
     public static int nextProjectileId = 1;
 
     public int id;
     public int casterId;
     public int targetId;
-    public int damage;
-    public int typeOfProjectile;
+    public Spell spell;
 
     private void Start()
     {
@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour
         ServerSend.ProjectilePosition(this);
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Hittable") && other.gameObject.GetComponent<Player>().id==targetId)
         {
@@ -58,18 +58,16 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Initialize(int casterId,int targetId,int damage, int typeOfProjectile)
+    public void Initialize(int casterId,int targetId, int spellId)
     {
-        this.typeOfProjectile = typeOfProjectile;
+        spell = spellBook.GetSpell(spellId);
         this.casterId = casterId;
         this.targetId = targetId;
-        this.damage = damage;
     }
 
     private void Explode()
     {
         ServerSend.ProjectileHit(this);
-        //Cod de atingere
         projectiles.Remove(id);
         Destroy(gameObject);
     }

@@ -61,11 +61,10 @@ public class ClientHandle : MonoBehaviour
         int id = _packet.ReadInt();
         int casterId = _packet.ReadInt();
         int targetId = _packet.ReadInt();
-        int damage = _packet.ReadInt();
         Vector3 positon = _packet.ReadVector3();
-        int typeOfProjectile = _packet.ReadInt();
+        int spellId = _packet.ReadInt();
         
-        GameManager.instance.SpawnProjectile(id,casterId,targetId,damage,positon,typeOfProjectile);
+        GameManager.instance.SpawnProjectile(id,casterId,targetId,positon,spellId);
     }
     
     public static void ProjectilePosition(Packet _packet)
