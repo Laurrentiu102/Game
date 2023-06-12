@@ -193,5 +193,16 @@ public class ServerSend
             SendTCPDataToAll(_packet);
         }
     }
+
+    public static void CastBarProgress(float progress,int clientId)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.castBarProgress))
+        {
+            _packet.Write(clientId);
+            _packet.Write(progress);
+
+            SendUDPData(clientId,_packet);
+        }
+    }
     #endregion
 }

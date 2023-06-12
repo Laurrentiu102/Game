@@ -91,4 +91,13 @@ public class ClientHandle : MonoBehaviour
         GameManager.projectiles.Remove(id);
         Destroy(aux);
     }
+
+    public static void CastBarProgress(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        float progress = _packet.ReadFloat();
+        
+        GameManager.players[id].spellCastBar.fillAmount = Mathf.Lerp(0,1,progress);
+        
+    }
 }

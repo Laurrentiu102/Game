@@ -16,7 +16,8 @@ public enum ServerPackets
     spawnProjectile,
     projectilePosition,
     projectileHit,
-    projectileDespawn
+    projectileDespawn,
+    castBarProgress
 }
 
 /// <summary>Sent from client to server.</summary>

@@ -45,8 +45,9 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>Attempts to connect to the server.</summary>
-    public void ConnectToServer()
+    public void ConnectToServer(string ip)
     {
+        this.ip = ip;
         InitializeClientData();
 
         isConnected = true;
@@ -306,7 +307,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.spawnProjectile, ClientHandle.SpawnProjectile },
             { (int)ServerPackets.projectilePosition, ClientHandle.ProjectilePosition },
             { (int)ServerPackets.projectileHit, ClientHandle.ProjectileHit },
-            { (int)ServerPackets.projectileDespawn, ClientHandle.ProjectileDespawn }
+            { (int)ServerPackets.projectileDespawn, ClientHandle.ProjectileDespawn },
+            { (int)ServerPackets.castBarProgress, ClientHandle.CastBarProgress }
         };
         Debug.Log("Initialized packets.");
     }

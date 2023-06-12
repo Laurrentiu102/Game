@@ -7,15 +7,22 @@ public class Player : MonoBehaviour
     public int id;
     public string username;
     public CharacterController controller;
-    public Rigidbody rigidbody;
     public int targetId;
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
+    public static SpellBook spellBook = null;
+    public Coroutine spellCoroutine;
 
     private bool[] inputs;
     private float yVelocity = 0;
 
+    private void Awake()
+    {
+        if (spellBook == null)
+            spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
+    }
+    
     private void Start()
     {
         gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
@@ -59,6 +66,7 @@ public class Player : MonoBehaviour
     /// <param name="_inputDirection"></param>
     private void Move(Vector2 _inputDirection)
     {
+        Vector3 oldPosition = transform.position;
         Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
         _moveDirection *= moveSpeed;
 
@@ -74,7 +82,12 @@ public class Player : MonoBehaviour
 
         _moveDirection.y = yVelocity;
         controller.Move(_moveDirection);
-
+        
+        if (oldPosition != transform.position)
+        {
+            StopSpellCasting();
+        }
+        
         ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
     }
@@ -90,7 +103,38 @@ public class Player : MonoBehaviour
 
     public void CastProjectile(int spellId,Vector3 viewDirection)
     {
-        if(targetId!=0 && targetId!=-1)
-            NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,targetId,spellId);
+        if (targetId != 0 && targetId != -1)
+        {
+            if(spellCoroutine==null)
+                spellCoroutine=StartCoroutine(SpellProgress(spellId));
+            //NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,targetId,spellId);
+        }
+    }
+
+    private IEnumerator SpellProgress(int spellId)
+    {
+        Spell spell = spellBook.GetSpell(spellId);
+        float timeLeft = Time.deltaTime;
+        float rate = 1.0f / spell.CastTime;
+        float progress = 0.0f;
+
+        while (progress <= 1.0f)
+        {
+            progress += rate * Time.deltaTime;
+            ServerSend.CastBarProgress(progress,id);
+            yield return null;
+        }
+        
+        NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,targetId,spellId);
+        spellCoroutine = null;
+    }
+
+    public void StopSpellCasting()
+    {
+        if (spellCoroutine != null)
+        {
+            StopCoroutine(spellCoroutine);
+            spellCoroutine = null;
+        }
     }
 }

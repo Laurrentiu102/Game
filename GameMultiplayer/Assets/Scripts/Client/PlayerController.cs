@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -6,14 +7,11 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public TextMeshProUGUI spellCastTime;
-    public TextMeshProUGUI spellName;
-    public Image spellIcon;
-    public SpellBook spellBook;
+    public PlayerManager playerManager;
 
     private void Awake()
     {
-        spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
+        playerManager.spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
     }
 
     private void FixedUpdate()
@@ -31,11 +29,28 @@ public class PlayerController : MonoBehaviour
         if (id != -1)
         {
             ClientSend.PlayerCastProjectile(id,transform.forward);
-            Spell spell = spellBook.GetSpell(id);
-            spellName.text = spell.Name;
-            spellIcon.sprite = spell.Icon;
-            spellCastTime.text = spell.CastTime.ToString(CultureInfo.InvariantCulture);
+            Spell spell = playerManager.spellBook.GetSpell(id);
+            playerManager.currentSpell = spell;
+            playerManager.spellName.text = spell.Name;
+            playerManager.spellIcon.sprite = spell.Icon;
+            playerManager.spellCastBar.color = spell.BarColor;
+            playerManager.spellCastTime.text = spell.CastTime.ToString(CultureInfo.InvariantCulture);
+            playerManager.spellCastBar.fillAmount = 0;
+            playerManager.startCastPosition = transform.position;
+            StartCoroutine(ShowSpellCastCanvas());
         }
+    }
+    
+    private IEnumerator ShowSpellCastCanvas()
+    {
+        playerManager.spellCastCanvas.SetActive(true);
+        while(playerManager.spellCastBar.fillAmount<1)
+        {
+            if(playerManager.startCastPosition!=transform.position)
+                break;
+            yield return null;
+        }
+        playerManager.spellCastCanvas.SetActive(false);
     }
 
     /// <summary>Sends player input to the server.</summary>

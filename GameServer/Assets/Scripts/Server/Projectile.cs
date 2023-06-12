@@ -6,7 +6,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
-    public SpellBook spellBook;
+    public static SpellBook spellBook = null;
     
     public static int nextProjectileId = 1;
 
@@ -14,6 +14,12 @@ public class Projectile : MonoBehaviour
     public int casterId;
     public int targetId;
     public Spell spell;
+
+    private void Awake()
+    {
+        if (spellBook == null)
+            spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
+    }
 
     private void Start()
     {
