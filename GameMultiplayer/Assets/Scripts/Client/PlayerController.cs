@@ -9,11 +9,6 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerManager playerManager;
 
-    private void Awake()
-    {
-        playerManager.spellBook = GameObject.Find("SpellBook").GetComponent<SpellBook>();
-    }
-
     private void FixedUpdate()
     {
         SendInputToServer();
@@ -21,36 +16,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        int id = -1;
+        int spellId = -1;
         for (int i = 0; i < 2; i++)
             if (Input.GetKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), (i + 49).ToString())))
-                id = i;
+                spellId = i;
 
-        if (id != -1)
+        if (spellId != -1)
         {
-            ClientSend.PlayerCastProjectile(id,transform.forward);
-            Spell spell = playerManager.spellBook.GetSpell(id);
-            playerManager.currentSpell = spell;
-            playerManager.spellName.text = spell.Name;
-            playerManager.spellIcon.sprite = spell.Icon;
-            playerManager.spellCastBar.color = spell.BarColor;
-            playerManager.spellCastTime.text = spell.CastTime.ToString(CultureInfo.InvariantCulture);
-            playerManager.spellCastBar.fillAmount = 0;
-            playerManager.startCastPosition = transform.position;
-            StartCoroutine(ShowSpellCastCanvas());
+            ClientSend.PlayerCastProjectile(spellId,transform.forward);
+            playerManager.CastProjectile(spellId);
         }
-    }
-    
-    private IEnumerator ShowSpellCastCanvas()
-    {
-        playerManager.spellCastCanvas.SetActive(true);
-        while(playerManager.spellCastBar.fillAmount<1)
-        {
-            if(playerManager.startCastPosition!=transform.position)
-                break;
-            yield return null;
-        }
-        playerManager.spellCastCanvas.SetActive(false);
     }
 
     /// <summary>Sends player input to the server.</summary>

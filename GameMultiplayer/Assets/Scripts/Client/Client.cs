@@ -229,6 +229,8 @@ public class Client : MonoBehaviour
         {
             try
             {
+                if(instance==null)
+                    return;
                 _packet.InsertInt(instance.myId); // Insert the client's ID at the start of the packet
                 if (socket != null)
                 {
@@ -314,7 +316,7 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>Disconnects from the server and stops all network traffic.</summary>
-    private void Disconnect()
+    public void Disconnect()
     {
         if (isConnected)
         {

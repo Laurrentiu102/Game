@@ -113,6 +113,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator SpellProgress(int spellId)
     {
+        int oldTargetId = targetId;
         Spell spell = spellBook.GetSpell(spellId);
         float timeLeft = Time.deltaTime;
         float rate = 1.0f / spell.CastTime;
@@ -125,7 +126,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
         
-        NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,targetId,spellId);
+        NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,oldTargetId,spellId);
         spellCoroutine = null;
     }
 

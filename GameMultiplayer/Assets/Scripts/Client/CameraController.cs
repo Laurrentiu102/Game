@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
 
     private RaycastHit hit;
     private Vector2 mousePos;
+    private bool okToMove = false;
 
 
     private void Start()
@@ -63,20 +64,24 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            mousePos = Input.mousePosition;
-        }
-
-        if (Input.GetMouseButtonUp(1))
-        {
-            SetCursorPos((int)mousePos.x, Screen.height-(int)mousePos.y);
-        }
-        
-        if (Input.GetMouseButton(1))
+        bool isPointerOverUIElement = UITest.instance.IsPointerOverUIElement();
+        if (Input.GetMouseButtonDown(1) && !isPointerOverUIElement)
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
+            mousePos = Input.mousePosition;
+            okToMove= true;
+        }
+
+        if (Input.GetMouseButtonUp(1) && !isPointerOverUIElement)
+        {
+            if(okToMove)
+                SetCursorPos((int)mousePos.x, Screen.height-(int)mousePos.y);
+            okToMove = false;
+        }
+        
+        if (Input.GetMouseButton(1) && okToMove)
+        {
             mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
             mouseY -= Input.GetAxis("Mouse Y") * rotationSpeed;
             mouseY = Mathf.Clamp(mouseY, -60f, 60f);
@@ -104,9 +109,6 @@ public class CameraController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        
-
-        Debug.DrawLine(target.transform.position-transform.forward,target.position,Color.red);
     }
     
     [DllImport("user32.dll", EntryPoint = "SetCursorPos")]

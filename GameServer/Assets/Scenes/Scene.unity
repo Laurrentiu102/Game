@@ -432,11 +432,13 @@ MonoBehaviour:
     damage: 10
     speed: 1
     castTime: 1
+    projectilePrefab: {fileID: 6608509096447278837, guid: d72f5d2d16d45324aa885131c0ed8b2c, type: 3}
   - id: 1
     name: Shadowball
     damage: 5
     speed: 1
     castTime: 1.5
+    projectilePrefab: {fileID: 6608509096447278837, guid: d72f5d2d16d45324aa885131c0ed8b2c, type: 3}
 --- !u!4 &978400849
 Transform:
   m_ObjectHideFlags: 0
@@ -445,7 +447,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978400847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.0734196, y: 203.30779, z: 7.496861}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -847,9 +849,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 4187005777591049097, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
-  projectilesPrefabs:
-  - {fileID: 6590821616795268707, guid: 23ce275407227c74cba57b6aa4854e5c, type: 3}
-  - {fileID: 6590821616795268707, guid: c4c30fa10fb6d8d4eb90efa24a665aed, type: 3}
 --- !u!4 &1780971000
 Transform:
   m_ObjectHideFlags: 0

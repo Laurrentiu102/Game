@@ -11,15 +11,18 @@ public class Highlight : MonoBehaviour
     private GameObject oldTarget;
     private GameObject oldClickTarget;
     public PlayerManager playerManager;
-    
+    public static Highlight instance;
+
     public Camera playerCamera;
     private void Awake()
     {
         hightlightMask = LayerMask.NameToLayer("Highlight");
         defaultMask = LayerMask.NameToLayer("Default");
         clickHighlightMask = LayerMask.NameToLayer("HighlightClicked");
+        if(instance == null)
+            instance = this;
     }
-
+    RaycastHit hit;
     private void ChangeGameObjectLayer(GameObject gameObject,int layer)
     {
         gameObject.layer = layer;
@@ -41,9 +44,9 @@ public class Highlight : MonoBehaviour
 
     void LateUpdate()
     {
-        RaycastHit hit;
-        Debug.DrawRay(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction*1000f,Color.red);
-        if(!Input.GetMouseButton(1) && Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity))
+        bool isPointerOverUIElement = UITest.instance.IsPointerOverUIElement();
+        //Debug.DrawRay(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction*1000f,Color.red);
+        if(!Input.GetMouseButton(1) && Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity) && !isPointerOverUIElement)
         {
             GameObject target = GetTransformParent(hit.collider.gameObject);
             if (target.CompareTag("Targetable"))
@@ -73,7 +76,7 @@ public class Highlight : MonoBehaviour
                 ChangeGameObjectLayer(oldTarget, defaultMask);
         }
         
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isPointerOverUIElement)
         {
             if(Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity))
             {
@@ -90,44 +93,48 @@ public class Highlight : MonoBehaviour
                         playerManager.targetId = 999;
                 }
             }
-        }else if (Input.GetKeyDown(KeyCode.Escape))
+        }
+    }
+
+    public void EscapePressed()
+    {
+        if (oldClickTarget != null)
         {
-            if(oldClickTarget!=null)
+            ChangeGameObjectLayer(oldClickTarget, defaultMask);
+            oldClickTarget = null;
+            playerManager.targetId = -1;
+
+            if (Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,
+                    playerCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity))
             {
-                ChangeGameObjectLayer(oldClickTarget, defaultMask);
-                oldClickTarget = null;
-                playerManager.targetId = -1;
-                
-                if(Physics.Raycast(playerCamera.ScreenPointToRay(Input.mousePosition).origin,playerCamera.ScreenPointToRay(Input.mousePosition).direction,out hit,Mathf.Infinity))
+                GameObject target = GetTransformParent(hit.collider.gameObject);
+                if (target.CompareTag("Targetable"))
                 {
-                    GameObject target = GetTransformParent(hit.collider.gameObject);
-                    if (target.CompareTag("Targetable"))
+                    if (target.layer == defaultMask)
                     {
-                        if (target.layer == defaultMask)
-                        {
-                            if(oldTarget!=null && oldTarget!=target && oldTarget.layer!=clickHighlightMask)
-                                ChangeGameObjectLayer(oldTarget, defaultMask);
-                            oldTarget = target;
-                            ChangeGameObjectLayer(target, hightlightMask);
-                        }
-                        else if (target.layer == clickHighlightMask)
-                        {
-                            if(oldTarget!=null && oldTarget!=target)
-                                ChangeGameObjectLayer(oldTarget, defaultMask);
-                        }
+                        if (oldTarget != null && oldTarget != target && oldTarget.layer != clickHighlightMask)
+                            ChangeGameObjectLayer(oldTarget, defaultMask);
+                        oldTarget = target;
+                        ChangeGameObjectLayer(target, hightlightMask);
                     }
-                    else
+                    else if (target.layer == clickHighlightMask)
                     {
-                        if(oldTarget!=null && oldTarget!=target && oldTarget.layer!=clickHighlightMask)
+                        if (oldTarget != null && oldTarget != target)
                             ChangeGameObjectLayer(oldTarget, defaultMask);
                     }
                 }
                 else
                 {
-                    if (oldTarget != null && oldTarget.layer!=clickHighlightMask)
+                    if (oldTarget != null && oldTarget != target && oldTarget.layer != clickHighlightMask)
                         ChangeGameObjectLayer(oldTarget, defaultMask);
                 }
             }
-        }
+            else
+            {
+                if (oldTarget != null && oldTarget.layer != clickHighlightMask)
+                    ChangeGameObjectLayer(oldTarget, defaultMask);
+            }
+        }else
+            PauseMenu.instance.EscapePressed();
     }
 }

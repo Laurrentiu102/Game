@@ -28,4 +28,6 @@ public class Spell
     public float Speed => speed;
 
     public float CastTime => castTime;
+
+    public GameObject projectilePrefab;
 }
