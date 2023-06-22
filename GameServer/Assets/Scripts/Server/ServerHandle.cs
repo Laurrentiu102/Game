@@ -41,4 +41,9 @@ public class ServerHandle
         Vector3 viewDirection = _packet.ReadVector3();
         Server.clients[_fromClient].player.CastProjectile(spellId,viewDirection);
     }
+
+    public static void PlayerCastProjectileCancel(int _fromClient, Packet _packet)
+    {
+        Server.clients[_fromClient].player.StopSpellCasting();
+    }
 }

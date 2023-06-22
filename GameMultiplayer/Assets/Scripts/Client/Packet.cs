@@ -27,6 +27,7 @@ public enum ClientPackets
     playerMovement,
     playerTargetId,
     playerCastProjectile,
+    playerCastProjectileCancel
 }
 
 public class Packet : IDisposable

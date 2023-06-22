@@ -97,7 +97,7 @@ public class ClientHandle : MonoBehaviour
         int id = _packet.ReadInt();
         float progress = _packet.ReadFloat();
         
-        GameManager.players[id].spellCastBar.fillAmount = Mathf.Lerp(0,1,progress);
+        GameManager.players[id].playerController.spellCastBar.fillAmount = Mathf.Lerp(0,1,progress);
         
     }
 }

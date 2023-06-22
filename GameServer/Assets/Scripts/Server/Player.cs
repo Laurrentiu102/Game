@@ -107,7 +107,6 @@ public class Player : MonoBehaviour
         {
             if(spellCoroutine==null)
                 spellCoroutine=StartCoroutine(SpellProgress(spellId));
-            //NetworkManager.instance.InstantiateProjectile(transform,spellId).Initialize(id,targetId,spellId);
         }
     }
 

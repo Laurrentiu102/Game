@@ -519,19 +519,7 @@ MonoBehaviour:
   username: 
   targetId: 0
   tagName: {fileID: 6873705332427591742}
-  spellCastCanvas: {fileID: 0}
-  spellCastBar: {fileID: 0}
-  spellCastTime: {fileID: 0}
-  spellName: {fileID: 0}
-  spellIcon: {fileID: 0}
-  currentSpell:
-    id: 0
-    name: 
-    damage: 0
-    icon: {fileID: 0}
-    speed: 0
-    castTime: 0
-    barColor: {r: 0, g: 0, b: 0, a: 0}
+  playerController: {fileID: 6761221046541469059}
   ping: {fileID: 0}
 --- !u!114 &6761221046541469059
 MonoBehaviour:
@@ -546,6 +534,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerManager: {fileID: 8283048436765457631}
+  spellCastCanvas: {fileID: 0}
+  spellCastBar: {fileID: 0}
+  spellCastTime: {fileID: 0}
+  spellName: {fileID: 0}
+  spellIcon: {fileID: 0}
+  currentSpell:
+    id: 0
+    name: 
+    damage: 0
+    icon: {fileID: 0}
+    speed: 0
+    castTime: 0
+    barColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8947494530347368624
 GameObject:
   m_ObjectHideFlags: 0

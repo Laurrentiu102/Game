@@ -8,10 +8,30 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public PlayerManager playerManager;
+    
+    public GameObject spellCastCanvas;
+    public Image spellCastBar;
+    public TextMeshProUGUI spellCastTime;
+    public TextMeshProUGUI spellName;
+    public Image spellIcon;
+    public Spell currentSpell;
+    [NonSerialized]
+    public Vector3 startCastPosition;
+    private bool isCasting = false;
+    private Coroutine showSpellCastCanvasCoroutine;
 
     private void FixedUpdate()
     {
         SendInputToServer();
+    }
+
+    private void Awake()
+    {
+        spellCastCanvas = InterfaceElements.instance.spellCastCanvas;
+        spellCastBar = InterfaceElements.instance.spellCastBar;
+        spellCastTime = InterfaceElements.instance.spellCastTime;
+        spellName = InterfaceElements.instance.spellName;
+        spellIcon = InterfaceElements.instance.spellIcon;
     }
 
     private void Update()
@@ -24,7 +44,22 @@ public class PlayerController : MonoBehaviour
         if (spellId != -1)
         {
             ClientSend.PlayerCastProjectile(spellId,transform.forward);
-            playerManager.CastProjectile(spellId);
+            CastProjectile(spellId);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isCasting)
+            {
+                StopCoroutine(showSpellCastCanvasCoroutine);
+                spellCastCanvas.SetActive(false);
+                isCasting = false;
+                ClientSend.PlayerCastProjectileCancel();
+            }
+            else
+            {
+                Highlight.instance.EscapePressed();
+            }
         }
     }
 
@@ -41,5 +76,35 @@ public class PlayerController : MonoBehaviour
         };
 
         ClientSend.PlayerMovement(_inputs);
+    }
+    
+    public void CastProjectile(int spellId)
+    {
+        if (!isCasting && playerManager.targetId!=-1 && playerManager.targetId!=0)
+        {
+            Spell spell = SpellBook.instance.GetSpell(spellId);
+            currentSpell = spell;
+            spellName.text = spell.Name;
+            spellIcon.sprite = spell.Icon;
+            spellCastBar.color = spell.BarColor;
+            spellCastTime.text = spell.CastTime.ToString(CultureInfo.InvariantCulture);
+            spellCastBar.fillAmount = 0;
+            startCastPosition = transform.position;
+            showSpellCastCanvasCoroutine=StartCoroutine(ShowSpellCastCanvas());
+        }
+    }
+    
+    private IEnumerator ShowSpellCastCanvas()
+    {
+        isCasting = true;
+        spellCastCanvas.SetActive(true);
+        while(spellCastBar.fillAmount<1)
+        {
+            if(startCastPosition!=transform.position)
+                break;
+            yield return null;
+        }
+        spellCastCanvas.SetActive(false);
+        isCasting = false;
     }
 }

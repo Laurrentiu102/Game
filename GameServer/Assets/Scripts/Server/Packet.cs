@@ -25,7 +25,8 @@ public enum ClientPackets
     welcomeReceived = 1,
     playerMovement,
     playerTargetId,
-    playerCastProjectile
+    playerCastProjectile,
+    playerCastProjectileCancel
 }
 
 public class Packet : IDisposable
