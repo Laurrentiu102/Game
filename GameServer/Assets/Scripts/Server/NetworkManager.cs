@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager instance;
 
     public GameObject playerPrefab;
+    public GameObject projectilePrefab;
 
     private void Awake()
     {
@@ -48,6 +49,6 @@ public class NetworkManager : MonoBehaviour
     
     public Projectile InstantiateProjectile(Transform shootOrigin,int spellId)
     {
-        return Instantiate(SpellBook.instance.GetSpell(spellId).projectilePrefab, shootOrigin.position+shootOrigin.forward*0.7f, Quaternion.identity).GetComponent<Projectile>();
+        return Instantiate(projectilePrefab, shootOrigin.position+shootOrigin.forward*0.7f, Quaternion.identity).GetComponent<Projectile>();
     }
 }
